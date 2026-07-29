@@ -12,3 +12,5 @@
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 56, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785356044.2789845}
 {"type": "incoming", "chat_id": 5740556268, "text": "A shop sells items at $12 each with a 20% discount. What's the final price for 5 items? Reply with ONLY this JSON: {\"answer\": <number>, \"log_url\": \"...\"}", "timestamp": 1785356044.6885152}
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 48, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785356045.8566506}
+{"type": "incoming", "chat_id": 5740556268, "text": "What is the largest ocean on Earth? Reply with ONLY this JSON: {\"answer\": \"...\"}", "timestamp": 1785360150.8718047}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": \"The Pacific Ocean\", \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785360152.6166995}
