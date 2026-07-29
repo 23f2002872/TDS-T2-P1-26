@@ -20,3 +20,5 @@
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": \"Pacific Ocean\", \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785364382.1985536}
 {"type": "incoming", "chat_id": 5740556268, "text": "What is 45% of 480? Reply with ONLY this JSON: {\"answer\": <number>, \"log_url\": \"...\"}", "timestamp": 1785365250.4772508}
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 216, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785365252.2893944}
+{"type": "incoming", "chat_id": 5740556268, "text": "Name the three most populous countries in the world. Reply with ONLY this JSON: {\"answer\": [\"...\", \"...\", \"...\"]}", "timestamp": 1785365544.4579961}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": [\"China\", \"India\", \"United States\"], \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785365545.6112742}
