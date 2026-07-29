@@ -1,0 +1,10 @@
+{"type": "incoming", "chat_id": 5740556268, "text": "What is 15% of 200? Reply with ONLY this JSON: {\"answer\": <number>, \"log_url\": \"...\"}", "timestamp": 1785349972.299315}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 30, \"log_url\": \"https://raw.githubusercontent.com/PLACEHOLDER/PLACEHOLDER/main/run.jsonl\"}", "timestamp": 1785349974.0740666}
+{"type": "incoming", "chat_id": 5740556268, "text": "Which country has the largest population? Reply with ONLY this JSON: {\"answer\": {\"country\": \"...\"}, \"log_url\": \"...\"}", "timestamp": 1785350322.796353}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": {\"country\": \"China\"}, \"log_url\": \"https://raw.githubusercontent.com/PLACEHOLDER/PLACEHOLDER/main/run.jsonl\"}", "timestamp": 1785350324.9542923}
+{"type": "incoming", "chat_id": 5740556268, "text": "A shop sells items at $12 each with a 20% discount. What's the final price for 5 items? Reply with ONLY this JSON: {\"answer\": <number>, \"log_url\": \"...\"}", "timestamp": 1785350344.308976}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 48, \"log_url\": \"https://raw.githubusercontent.com/PLACEHOLDER/PLACEHOLDER/main/run.jsonl\"}", "timestamp": 1785350345.6110272}
+{"type": "incoming", "chat_id": 5740556268, "text": "msg1: \"I have 3 apples and 4 oranges.\"", "timestamp": 1785350390.3264105}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 7, \"log_url\": \"https://raw.githubusercontent.com/PLACEHOLDER/PLACEHOLDER/main/run.jsonl\"}", "timestamp": 1785350392.2900243}
+{"type": "incoming", "chat_id": 5740556268, "text": "msg2: \"How many pieces of fruit total? Reply with ONLY this JSON: {\"answer\": <number>, \"log_url\": \"...\"}\"", "timestamp": 1785350402.9180927}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 7, \"log_url\": \"https://raw.githubusercontent.com/PLACEHOLDER/PLACEHOLDER/main/run.jsonl\"}", "timestamp": 1785350404.3693554}
