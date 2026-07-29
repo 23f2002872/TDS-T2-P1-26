@@ -1,0 +1,16 @@
+services:
+  - type: worker
+    name: tds-telegram-bot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: AIPIPE_TOKEN
+        sync: false
+      - key: LOG_URL
+        value: https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl
+      - key: MODEL_NAME
+        value: gpt-4.1-mini
