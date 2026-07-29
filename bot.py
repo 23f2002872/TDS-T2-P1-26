@@ -1,7 +1,9 @@
 import json
 import os
+import threading
 import time
 import traceback
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -86,7 +88,27 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(final_reply)
 
 
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"ok")
+
+    def log_message(self, format, *args):
+        pass
+
+
+def run_health_server():
+    port = int(os.environ.get("PORT", 8080))
+    HTTPServer(("0.0.0.0", port), HealthHandler).serve_forever()
+
+
 def main():
+    # Render's free Web Service plan requires binding $PORT and responding to
+    # HTTP requests to stay up — the actual bot logic is Telegram polling, not
+    # HTTP, so this just satisfies that health check on the side.
+    threading.Thread(target=run_health_server, daemon=True).start()
+
     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     print("Bot is running... (Ctrl+C to stop)")
