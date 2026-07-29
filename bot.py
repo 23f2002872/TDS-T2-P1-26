@@ -17,52 +17,75 @@ TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 AIPIPE_TOKEN = os.environ["AIPIPE_TOKEN"]
 LOG_URL = os.environ["LOG_URL"]
 MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-4.1-mini")
-LOG_FILE = os.environ.get("LOG_FILE", "run.jsonl")
 GITHUB_REPO = os.environ.get("GITHUB_REPO")  # "owner/repo", enables log push when set
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 
 client = OpenAI(base_url="https://aipipe.org/openai/v1", api_key=AIPIPE_TOKEN)
 
 git_lock = threading.Lock()
+git_ready = False
+
+LOG_REPO_DIR = "log_repo"
+LOG_FILENAME = "run.jsonl"
+# When git push is configured, log inside the dedicated clone below so pushes
+# and local writes touch the same file; otherwise just log next to the app.
+LOG_FILE = (
+    os.path.join(LOG_REPO_DIR, LOG_FILENAME)
+    if (GITHUB_REPO and GITHUB_TOKEN)
+    else os.environ.get("LOG_FILE", LOG_FILENAME)
+)
 
 
 def git_push_enabled():
     return bool(GITHUB_REPO and GITHUB_TOKEN)
 
 
-def _git(*args, timeout=20):
-    return subprocess.run(["git", *args], capture_output=True, text=True, timeout=timeout)
+def _git(*args, timeout=30):
+    return subprocess.run(
+        ["git", *args], capture_output=True, text=True, timeout=timeout, cwd=LOG_REPO_DIR
+    )
 
 
-def setup_git_remote():
-    _git("config", "user.email", "bot@tds-telegram-bot.local")
-    _git("config", "user.name", "TDS Telegram Bot")
-    _git("remote", "set-url", "origin", f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git")
-
-
-def sync_log_from_remote():
-    # A fresh Render instance boots from the last build's snapshot, which
-    # predates whatever a previous (now spun-down) instance already pushed —
-    # reset to origin/main so we build on the latest log, not a stale one.
+def ensure_log_repo():
+    # Do our own clone into a dedicated folder rather than assuming the app's
+    # own deployed files include .git — some hosts ship a built artifact
+    # without version-control metadata to the runtime container, so we can't
+    # rely on that being present.
+    global git_ready
     if not git_push_enabled():
         return
+    remote_url = f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git"
     try:
-        setup_git_remote()
-        _git("fetch", "origin", "main")
-        _git("reset", "--hard", "origin/main")
+        if not os.path.isdir(os.path.join(LOG_REPO_DIR, ".git")):
+            clone = subprocess.run(
+                ["git", "clone", remote_url, LOG_REPO_DIR],
+                capture_output=True, text=True, timeout=30,
+            )
+            if clone.returncode != 0:
+                print(f"[git] clone failed: {clone.stderr.strip()[:300]}")
+                return
+        else:
+            _git("remote", "set-url", "origin", remote_url)
+            _git("fetch", "origin", "main")
+            _git("reset", "--hard", "origin/main")
+        _git("config", "user.email", "bot@tds-telegram-bot.local")
+        _git("config", "user.name", "TDS Telegram Bot")
+        git_ready = True
     except Exception as exc:
-        print(f"[git] startup sync failed, continuing with local log: {exc}")
+        print(f"[git] setup failed, logging locally only: {exc}")
 
 
 def push_log():
-    if not git_push_enabled():
+    if not git_ready:
         return
     with git_lock:
         try:
-            _git("add", LOG_FILE)
+            _git("add", LOG_FILENAME)
             commit = _git("commit", "-m", "Update run log")
             if commit.returncode != 0:
-                return  # nothing new since the last push
+                if "nothing to commit" not in (commit.stdout + commit.stderr).lower():
+                    print(f"[git] commit issue: {commit.stdout.strip()[:200]} {commit.stderr.strip()[:200]}")
+                return
             push = _git("push", "origin", "HEAD:main")
             if push.returncode != 0:
                 print(f"[git] push rejected: {push.stderr.strip()[:300]}")
@@ -154,7 +177,8 @@ def run_health_server():
 
 
 def main():
-    sync_log_from_remote()
+    ensure_log_repo()
+    os.makedirs(os.path.dirname(LOG_FILE) or ".", exist_ok=True)
 
     # Render's free Web Service plan requires binding $PORT and responding to
     # HTTP requests to stay up — the actual bot logic is Telegram polling, not
