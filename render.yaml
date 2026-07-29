@@ -17,3 +17,7 @@ services:
         value: gpt-4.1-mini
       - key: PYTHON_VERSION
         value: 3.11.9
+      - key: GITHUB_REPO
+        value: 23f2002872/TDS-T2-P1-26
+      - key: GITHUB_TOKEN
+        sync: false

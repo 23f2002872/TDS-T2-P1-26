@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import threading
 import time
 import traceback
@@ -17,8 +18,56 @@ AIPIPE_TOKEN = os.environ["AIPIPE_TOKEN"]
 LOG_URL = os.environ["LOG_URL"]
 MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-4.1-mini")
 LOG_FILE = os.environ.get("LOG_FILE", "run.jsonl")
+GITHUB_REPO = os.environ.get("GITHUB_REPO")  # "owner/repo", enables log push when set
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")
 
 client = OpenAI(base_url="https://aipipe.org/openai/v1", api_key=AIPIPE_TOKEN)
+
+git_lock = threading.Lock()
+
+
+def git_push_enabled():
+    return bool(GITHUB_REPO and GITHUB_TOKEN)
+
+
+def _git(*args, timeout=20):
+    return subprocess.run(["git", *args], capture_output=True, text=True, timeout=timeout)
+
+
+def setup_git_remote():
+    _git("config", "user.email", "bot@tds-telegram-bot.local")
+    _git("config", "user.name", "TDS Telegram Bot")
+    _git("remote", "set-url", "origin", f"https://{GITHUB_TOKEN}@github.com/{GITHUB_REPO}.git")
+
+
+def sync_log_from_remote():
+    # A fresh Render instance boots from the last build's snapshot, which
+    # predates whatever a previous (now spun-down) instance already pushed —
+    # reset to origin/main so we build on the latest log, not a stale one.
+    if not git_push_enabled():
+        return
+    try:
+        setup_git_remote()
+        _git("fetch", "origin", "main")
+        _git("reset", "--hard", "origin/main")
+    except Exception as exc:
+        print(f"[git] startup sync failed, continuing with local log: {exc}")
+
+
+def push_log():
+    if not git_push_enabled():
+        return
+    with git_lock:
+        try:
+            _git("add", LOG_FILE)
+            commit = _git("commit", "-m", "Update run log")
+            if commit.returncode != 0:
+                return  # nothing new since the last push
+            push = _git("push", "origin", "HEAD:main")
+            if push.returncode != 0:
+                print(f"[git] push rejected: {push.stderr.strip()[:300]}")
+        except Exception as exc:
+            print(f"[git] push failed: {exc}")
 
 # Keeps the last few messages per chat, so multi-turn questions work —
 # "answer the LAST message" still needs the earlier ones for context.
@@ -86,6 +135,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     log_event({"type": "outgoing", "chat_id": chat_id, "text": final_reply})
     await update.message.reply_text(final_reply)
+    threading.Thread(target=push_log, daemon=True).start()
 
 
 class HealthHandler(BaseHTTPRequestHandler):
@@ -104,6 +154,8 @@ def run_health_server():
 
 
 def main():
+    sync_log_from_remote()
+
     # Render's free Web Service plan requires binding $PORT and responding to
     # HTTP requests to stay up — the actual bot logic is Telegram polling, not
     # HTTP, so this just satisfies that health check on the side.
