@@ -14,3 +14,6 @@
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 48, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785356045.8566506}
 {"type": "incoming", "chat_id": 5740556268, "text": "What is the largest ocean on Earth? Reply with ONLY this JSON: {\"answer\": \"...\"}", "timestamp": 1785360150.8718047}
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": \"The Pacific Ocean\", \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785360152.6166995}
+{"type": "incoming", "chat_id": 5740556268, "text": "What is 35% of 480? Reply with ONLY this JSON: {\"answer\": <number>, \"log_url\": \"...\"}", "timestamp": 1785364378.5325243}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 168, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785364380.652607}
+{"type": "incoming", "chat_id": 5740556268, "text": "What is the largest ocean on Earth? Reply with ONLY this JSON: {\"answer\": \"...\"}", "timestamp": 1785364381.0709875}
