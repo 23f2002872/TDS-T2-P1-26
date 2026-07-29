@@ -22,3 +22,5 @@
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 216, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785365252.2893944}
 {"type": "incoming", "chat_id": 5740556268, "text": "Name the three most populous countries in the world. Reply with ONLY this JSON: {\"answer\": [\"...\", \"...\", \"...\"]}", "timestamp": 1785365544.4579961}
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": [\"China\", \"India\", \"United States\"], \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785365545.6112742}
+{"type": "incoming", "chat_id": 5740556268, "text": "A train travels 300 km in 4 hours. Reply with ONLY this JSON: {\"answer\": {\"speed_kmph\": <number>, \"time_hours\": <number>}}", "timestamp": 1785365574.4824781}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": {\"speed_kmph\": 75, \"time_hours\": 4}, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785365575.8222873}
