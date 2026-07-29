@@ -26,3 +26,5 @@
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": {\"speed_kmph\": 75, \"time_hours\": 4}, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785365575.8222873}
 {"type": "incoming", "chat_id": 5740556268, "text": "Which Indian state has the lowest literacy rate based on Census data? Reply with ONLY this JSON: {\"answer\": {\"state\": \"...\"}}", "timestamp": 1785365610.0180907}
 {"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": {\"state\": \"Bihar\"}, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785365611.2977335}
+{"type": "incoming", "chat_id": 5740556268, "text": "What is 1/3 as a decimal rounded to 4 places? Reply with ONLY this JSON: {\"answer\": <number>}", "timestamp": 1785365632.4617822}
+{"type": "outgoing", "chat_id": 5740556268, "text": "{\"answer\": 0.3333, \"log_url\": \"https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl\"}", "timestamp": 1785365633.7208278}
