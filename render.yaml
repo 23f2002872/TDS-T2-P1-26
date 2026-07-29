@@ -15,3 +15,5 @@ services:
         value: https://raw.githubusercontent.com/23f2002872/TDS-T2-P1-26/main/run.jsonl
       - key: MODEL_NAME
         value: gpt-4.1-mini
+      - key: PYTHON_VERSION
+        value: 3.11.9
